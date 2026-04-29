@@ -5,9 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// The catch-all route must be at the very bottom, so we'll add it there.
 
 // Fallback route to serve storage files if storage:link is missing
 Route::get('/storage/{path}', function ($path) {
@@ -22,3 +20,12 @@ Route::get('/storage/{path}', function ($path) {
 
     return Response::make($file, 200)->header("Content-Type", $type);
 })->where('path', '.*');
+
+// Catch-all route to serve the React Single Page Application
+Route::get('/{any}', function () {
+    $path = public_path('index.html');
+    if (file_exists($path)) {
+        return file_get_contents($path);
+    }
+    return view('welcome');
+})->where('any', '.*');
