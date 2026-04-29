@@ -38,7 +38,8 @@ RUN a2enmod rewrite
 # Update Apache config to use the PORT environment variable and point to public directory
 RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/ports.conf \
     && sed -i 's/<VirtualHost \*:80>/<VirtualHost \*:${PORT}>/g' /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
+    && sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf \
+    && echo "<Directory /var/www/html/public>\n    AllowOverride All\n</Directory>" >> /etc/apache2/sites-available/000-default.conf
 
 # Set default port (Render typically sets this automatically)
 ENV PORT=8080
