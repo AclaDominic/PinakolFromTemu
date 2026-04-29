@@ -67,9 +67,15 @@ class StudentService
             }
 
             $query->where(function($q) use ($expandedTerms) {
+                $driver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
                 foreach ($expandedTerms as $term) {
-                    $q->orWhereRaw('LOWER(technical_skills) LIKE ?', ["%".strtolower($term)."%"])
-                      ->orWhereRaw('LOWER(other_skills) LIKE ?', ["%".strtolower($term)."%"]);
+                    if ($driver === 'pgsql') {
+                        $q->orWhereRaw('CAST(technical_skills AS TEXT) ILIKE ?', ["%{$term}%"])
+                          ->orWhereRaw('CAST(other_skills AS TEXT) ILIKE ?', ["%{$term}%"]);
+                    } else {
+                        $q->orWhereRaw('LOWER(technical_skills) LIKE ?', ["%".strtolower($term)."%"])
+                          ->orWhereRaw('LOWER(other_skills) LIKE ?', ["%".strtolower($term)."%"]);
+                    }
                 }
             });
         }

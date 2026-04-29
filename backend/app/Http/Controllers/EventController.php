@@ -20,7 +20,7 @@ class EventController extends Controller
         
         // Fetch all generic sports events for the current year
         $sportsEvents = Event::where('category', 'Sports')
-            ->whereYear('date', $currentYear)
+            ->where('date', 'LIKE', "{$currentYear}-%")
             ->get();
 
         $availableSports = [];
@@ -45,7 +45,7 @@ class EventController extends Controller
         $currentYear = now()->year;
         
         $activityEvents = Event::where('category', '!=', 'Sports')
-            ->whereYear('date', $currentYear)
+            ->where('date', 'LIKE', "{$currentYear}-%")
             ->get();
 
         $availableActivities = [];
