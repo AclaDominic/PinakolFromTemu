@@ -24,5 +24,12 @@ else
     echo "Database has records ($USER_COUNT users). Skipping seeders."
 fi
 
+# Optimize Laravel for production
+echo "Optimizing Laravel for production..."
+php artisan optimize:clear
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
 # Execute the main container command (e.g., apache2-foreground)
 exec "$@"
