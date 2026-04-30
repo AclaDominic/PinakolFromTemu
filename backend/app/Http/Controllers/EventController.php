@@ -6,7 +6,7 @@ use App\Models\Event;
 use App\Services\EventService;
 use App\Http\Resources\EventResource;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
+//
 class EventController extends Controller
 {
     use AuthorizesRequests;
@@ -17,14 +17,14 @@ class EventController extends Controller
     public function availableSports()
     {
         $currentYear = now()->year;
-        
+
         // Fetch all generic sports events for the current year
         $sportsEvents = Event::where('category', 'Sports')
             ->where('date', 'LIKE', "{$currentYear}-%")
             ->get();
 
         $availableSports = [];
-        
+
         foreach ($sportsEvents as $event) {
             // Remove common event-related suffixes to extract the core sport name
             $name = $event->name;
@@ -43,7 +43,7 @@ class EventController extends Controller
     public function availableActivities()
     {
         $currentYear = now()->year;
-        
+
         $activityEvents = Event::where('category', '!=', 'Sports')
             ->where('date', 'LIKE', "{$currentYear}-%")
             ->get();
